@@ -30,3 +30,9 @@ Key characteristics
 Most relationships are stochastic; this state of uncertainty is due mainly to the present of
 - latent factors on which y depends but that are not observed or measured (hidden variables)
 - measurement noise
+
+## Prediction
+- A prediction rule or relationship produces a predictor (mathematically defined). A predictor is not random
+
+## Supervised vs Unsupervised Learning
+- 
