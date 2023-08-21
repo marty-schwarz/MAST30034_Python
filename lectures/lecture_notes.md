@@ -38,7 +38,10 @@ Most relationships are stochastic; this state of uncertainty is due mainly to th
 - 
 
 
-# Lecture 2 
+# Lecture 2
+
+
+# Lecture 3
 
 ## Linear Model
 - Useful for predicting continuous response
@@ -111,9 +114,70 @@ Challenges of model selection
 <img src="screenshots/subsetselection.png" alt="" width="400"/>
 
 
+### Bias Variance Tradeoff
+Sometimes we wish to introduce bias to reduce variance. We want to reduce bias AND variance to reduce the overall error.
+
+<img src="screenshots/biasvar.png" alt="" width="400"/>
+
+To the left of optimal is underfit; to the right of optimal is overfit.
+
+<img src="screenshots/biasvarmaths.png" alt="" width="400"/>
+
 ### Regularisation (penalised regression)
 Perform linear regression while shrinking or penalising the parameters towards 0. Therefore, these methods perform model selection automatically.
 <img src="screenshots/regularisation.png" alt="" width="400"/>
 
-- Ridge regression
-- LASSO
+**Ridge regression**
+$$
+\hat\beta_{\text{ridge}}=\argmin_\beta \left(SS_{Reg}(\beta)+\lambda\sum_{j=1}^p \beta_j^2 \right)
+$$
+To find this, we minimise
+$$
+\min_\beta \left(\sum_{i=1}^n (y_i-\beta_0-\sum_{j=1}^p x_{ij}\beta_j) +\lambda\sum_{j=1}^p \beta_j^2\right) \\
+\iff \\
+SS_{Reg}(\beta, \lambda) = (y-X\beta)^T(y-X\beta)+\lambda\beta^T\beta \\
+\iff \\
+\hat\beta_{\text{ridge}}=(X^TX+\lambda I_p)^{-1}X^Ty
+$$
+- as $\lambda\to 0$, ridge estimates go to least squares estimates
+- as $\lambda\to\infty$, ridge estiamtes go to 0
+- determine $\lambda$ is important and difficult; use cross-validation
+- $\beta_0$ is NOT penalised
+- must scale before regularising, including ridge (*standardisation*)
+
+**LASSO (Least Absolute Shrinkage and Selection Operator)**
+- Unlike ridge regression, LASSO reduces parameters to 0
+- Hence can act as a selection operator for which parameters are important
+- Again, $\lambda$ is the tuning parameter
+$$
+\hat\beta_{\text{LASSO}}=\argmin_\beta \left(SS_{Reg}(\beta)+\lambda\sum_{j=1}^p |\beta_j| \right)
+$$
+To find this we minimise
+$$
+\min_\beta \left(\sum_{i=1}^n (y_i-\beta_0-\sum_{j=1}^p x_{ij}\beta_j) +\lambda\sum_{j=1}^p |\beta_j|\right)
+$$
+If $X^TX=I$ then the solution can be written as 
+$$
+\hat\beta_{\text{ridge}}=\text{sgn}(\hat\beta_j^{(LS)})\left(|\hat\beta_j^{(LS)}|-\frac{\lambda}{2}\right)
+$$
+
+<img src="screenshots/lagrange.png" alt="" width="400"/>
+
+<img src="screenshots/betadiagram.png" alt="" width="400"/>
+
+Regularisation is a process of introducing additional information to solve an ill-posed problem or to prevent overfitting
+- Pros
+    - Lower computational cost than best subset / stepwise regression selection
+    - Feasible for ultra high dimensional problems
+- Cons
+    - Estimates are sensitive to choice of $t$ and $\lambda$
+    - Does not do well when true values of parameters are large and most features are signficant
+    - Coefficients are biased
+
+
+# Lecture 4
+
+<img src="screenshots/naiveCV.png" alt="" width="400"/>
+
+- Reliable approach: k-fold cross validation (CV)
+- Rigorous approach: repeated k-fold cross validation (CV) (changing splits), but computationally expensive
